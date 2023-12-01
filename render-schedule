@@ -8,9 +8,15 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
+usage(){
+    echo "Usage: $0 --schedule <schedule_file> --overrides <overrides_file> --from <from_time> --until <until_time>"
+    exit 1
+}
+
 # Parse the command line arguments
 eval set -- "$VALID_ARGS"
-while [ : ]; do
+while :
+do
   case "$1" in
     -s | --schedule)
         SCHEDULE_FILE=$2
@@ -28,11 +34,15 @@ while [ : ]; do
         UNTIL_DATE=$2
         shift 2
         ;;
-    --) shift; 
-        break 
-        ;;
+    --) shift; break ;;
+    *) echo "Unsupported option: $1"
+       usage ;;
   esac
 done
+
+if [ -z "$SCHEDULE_FILE" ] || [ -z "$OVERRIDES_FILE" ] || [ -z "$FROM_DATE" ] || [ -z "$UNTIL_DATE" ]; then
+    usage
+fi
 
 # Run Python3 script with arguments
 python3 ./render-schedule.py --schedule_="$SCHEDULE_FILE" --overrides_="$OVERRIDES_FILE" --from_="$FROM_DATE" --until_="$UNTIL_DATE"
