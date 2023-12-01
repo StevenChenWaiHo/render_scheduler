@@ -201,10 +201,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Render a schedule')
 
     # Define arguments
-    parser.add_argument('--schedule_', type=str, help='Path to schedule JSON file')
-    parser.add_argument('--overrides_', type=str, help='Path to overrides JSON file')
-    parser.add_argument('--from_', type=str, help='Schedule Start date and time')
-    parser.add_argument('--until_', type=str, help='Schedule End date and time')
+    parser.add_argument('--schedule_', required=True, type=str, help='Path to schedule JSON file')
+    parser.add_argument('--overrides_', required=True, type=str, help='Path to overrides JSON file')
+    parser.add_argument('--from_', required=True, type=str, help='Schedule Start date and time')
+    parser.add_argument('--until_', required=True, type=str, help='Schedule End date and time')
 
     # Parse the command line arguments
     args = parser.parse_args()
