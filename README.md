@@ -69,3 +69,12 @@ You can run all the tests by python3
 ```
 python3 ./test_all.py
 ```
+
+# Implementation
+The algorithm is implemented by first creating the schedule  between the start date and end date without the overrides in `schdule_between_dates` then add the overrides into the schedule one override at a time in `overrides_schedule`.
+
+The algorithm is implemented such a way that we would not have the same shift person for adjacent shifts. Therefore, the schedule would be less cluttered.
+
+# Suggested Features
+1. Find the optimal schedule, where everyone have a fair duration of shift, after each person input their free time slots.
+2. Allow more than one person on call in each time period. Then, the algorithm would calculate which person to swap out for each override in order to achieve fairness.

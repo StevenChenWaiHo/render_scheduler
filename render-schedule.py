@@ -55,12 +55,10 @@ def render_schedule(schedule, overrides, start_date, end_date):
     # Get the schedule between start_date and end_date without overrides
     all_schedule = schedule_between_dates(schedule, start_date, end_date)
 
-    # print(f'Before Override: {all_schedule}')
     # Override the schedule if overrides exist
     if (overrides):
         overrided_schedule = overrides_schedule(all_schedule, overrides)
 
-    # print(f'After Override: {overrided_schedule}')
     return overrided_schedule
 
 
@@ -132,7 +130,6 @@ def overrides_schedule(schedule, overrides):
 
     for override in overrides:
         overrided_schedule = []
-        # print(f"Override {overrides}")
         override_user = override['user']
         override_start = override['start_at']
         override_end = override['end_at']
