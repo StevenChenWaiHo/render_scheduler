@@ -15,7 +15,7 @@ Make sure you are in the same directory with the script file
 ## Python (Others)
 Make sure you are in the same directory with the python file
 ```
-python3 ./render-schedule,py --schedule <path_to_schedule_file> --overrides <path_to_overrides_file> --from <from_time> --until <until_time>
+python3 ./render-schedule.py --schedule <path_to_schedule_file> --overrides <path_to_overrides_file> --from <from_time> --until <until_time>
 ```
 
 
