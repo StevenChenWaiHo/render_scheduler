@@ -107,8 +107,7 @@ def schedule_between_dates(schedule_data, start_date, end_date):
     # Start iterating until end_date
     while (shift_start < end_date):
 
-        if (shift_end >= end_date):
-            shift_end = end_date
+        shift_end = min(shift_end, end_date) # shift end date might be after end_date
 
         shift_arr.append({"user": users[user], "start_at": toDateString(shift_start), "end_at": toDateString(shift_end)})
         nextShift()
