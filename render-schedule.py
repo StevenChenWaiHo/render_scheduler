@@ -137,34 +137,51 @@ def overrides_schedule(schedule, overrides):
         override_user = override['user']
         override_start = override['start_at']
         override_end = override['end_at']
-        override_start = max(override_start, schedule[0]['start_at']) # overrided shift start date might be before schedule start date
-        override_end = min(override_end, schedule[-1]['end_at']) # overrided shift end date might be after schedule end date
+        schedule_start_date = schedule[0]['start_at']
+        schedule_end_date = schedule[-1]['end_at']
+
+        # Ignore override shift doesn't lie between schedule start date and end date
+        if (override_end < schedule_start_date or override_start > schedule_end_date):
+            continue
+
+        override_start = max(override_start,schedule_start_date) # Overrided shift start date might be before schedule start date
+        override_end = min(override_end, schedule_end_date) # Overrided shift end date might be after schedule end date
 
         shift = 0
-        # Find the start of the overrided shift
+        # Copy schedule until override start date lies between a shift
         while (shift < len(schedule)):
-
-            # Stop when start date of the override is in between a shift
-            if (override_start >= schedule[shift]['start_at'] and override_start <= schedule[shift]['end_at']):
-                # Add the overrided shift
-                if (override_start != schedule[shift]['start_at']): # Ignore shift with overlapped start_date
-                    overrided_schedule.append({"user": schedule[shift]['user'], "start_at": schedule[shift]['start_at'], "end_at": override_start})
-                break
             
-            # Otherwise copy the shift to the new schedule
+            if (override_start >= schedule[shift]['start_at'] and override_start <= schedule[shift]['end_at']):
+                # Add overrided shift
+                if (schedule[shift]['user'] == override_user): 
+                    # Merge start date if previous user is the same as the override user
+                    override_start = schedule[shift]['start_at']
+
+                if (override_start != schedule[shift]['start_at']): 
+                    # Ignore shift with overlapped start_date
+                    overrided_schedule.append({"user": schedule[shift]['user'], "start_at": schedule[shift]['start_at'], "end_at": override_start})
+                        
+                overrided_schedule.append({"user": override_user, "start_at": override_start, "end_at": override_end})
+                break
+
             overrided_schedule.append(schedule[shift])
             shift += 1
 
-        # Add overrided shift
-        overrided_schedule.append({"user": override_user, "start_at": override_start, "end_at": override_end})
+        
 
-        # Find the end of the overrided shift
+        # Find the end of the overrided shift, stop when end date of the override is in between a shift
         while (shift < len(schedule)):
 
             # Stop when end date of the override is in between a shift
-            if (override_end >= schedule[shift]['start_at'] and override_end < schedule[shift]['end_at']  ):
-                # Add the overrided shift
-                overrided_schedule.append({"user": schedule[shift]['user'], "start_at": override_end, "end_at": schedule[shift]['end_at']})
+            if (override_end >= schedule[shift]['start_at'] and override_end < schedule[shift]['end_at']):
+                # Add overrided shift
+                if (schedule[shift]['user'] == override_user): 
+                    # Merge end date if next user is the same as the override user
+                    override_end = schedule[shift]['end_at']
+                    overrided_schedule.pop()
+                    overrided_schedule.append({"user": override_user, "start_at": override_start, "end_at": override_end})
+                else:
+                    overrided_schedule.append({"user": schedule[shift]['user'], "start_at": override_end, "end_at": schedule[shift]['end_at']})
                 shift += 1
                 break
             shift += 1

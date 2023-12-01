@@ -7,6 +7,7 @@ import json
 testcases_folder = 'tests'
 
 class TestScheduler(unittest.TestCase):
+     maxDiff = None
      pass
 
 def make_test_function(description, schedule, answer):
