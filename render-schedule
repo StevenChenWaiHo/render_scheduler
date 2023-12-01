@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# Parse command line arguments
+VALID_ARGS=$(getopt -o s:o:f:u:: --long schedule:,overrides:,from:,until: -- "$@")
+
+# Error Handling for getopt
+if [ $? -ne 0 ]; then
+    exit 1;
+fi
+
+# Parse the command line arguments
+eval set -- "$VALID_ARGS"
+while [ : ]; do
+  case "$1" in
+    -s | --schedule)
+        SCHEDULE_FILE=$2
+        shift 2
+        ;;
+    -o | --overrides)
+        OVERRIDES_FILE=$2
+        shift 2
+        ;;
+    -f | --from)
+        FROM_DATE=$2
+        shift 2
+        ;;
+    -u | --until)
+        UNTIL_DATE=$2
+        shift 2
+        ;;
+    --) shift; 
+        break 
+        ;;
+  esac
+done
+
+# Run Python3 script with arguments
+python3 ./render-schedule.py --schedule_="$SCHEDULE_FILE" --overrides_="$OVERRIDES_FILE" --from_="$FROM_DATE" --until_="$UNTIL_DATE"
