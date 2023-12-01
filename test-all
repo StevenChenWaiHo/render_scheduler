@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Run all tests
+python3 ./test_all.py
